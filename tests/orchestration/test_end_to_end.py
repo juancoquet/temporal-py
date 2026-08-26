@@ -10,7 +10,7 @@ import pytest
 from temporalio.contrib.pydantic import pydantic_data_converter
 from temporalio.testing import WorkflowEnvironment
 
-from src.activities.example_plan.contract import ExampleRequest
+from src.activities.example_plan.models import ExampleRequest
 from src.activities.example_plan.worker import build_worker as build_plan_worker
 from src.activities.example_process.worker import build_worker as build_process_worker
 from src.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW

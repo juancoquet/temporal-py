@@ -9,10 +9,9 @@ from typing import Protocol
 
 from temporalio import activity
 
-# A runtime import, not a type-checking one: Temporal resolves an activity's argument type from its
-# signature at registration to deserialise the payload, so ``ExampleItem`` must exist at runtime.
-from src.activities.example_plan.contract import ExampleItem
-from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY, ExampleResult
+from src.activities.example_plan.models import ExampleItem
+from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
+from src.activities.example_process.models import ExampleResult
 
 
 class ExampleService(Protocol):

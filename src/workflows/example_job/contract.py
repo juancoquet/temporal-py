@@ -1,10 +1,10 @@
 """The ``example_job`` workflow's contract — dispatched by name, id derived from the payload.
 
-Its argument and result types are the activities' boundary types, imported from their contracts.
+Its argument and result types are the activities' domain models, imported from their models modules.
 """
 
-from src.activities.example_plan.contract import ExampleRequest
-from src.activities.example_process.contract import ExampleResult
+from src.activities.example_plan.models import ExampleRequest
+from src.activities.example_process.models import ExampleResult
 from src.orchestration.contracts import WorkflowContract, WorkflowId
 from src.workflows.names import WorkflowName
 

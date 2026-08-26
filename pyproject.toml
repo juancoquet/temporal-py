@@ -70,7 +70,7 @@ lint.ignore = [
 # activity's argument type from its signature at registration to deserialise the payload. Without
 # this, the type-checking rules would move those imports into `if TYPE_CHECKING` and break them.
 runtime-evaluated-base-classes = ["pydantic.BaseModel", "src.primitives.FrozenBaseModel"]
-runtime-evaluated-decorators = ["temporalio.activity.defn"]
+runtime-evaluated-decorators = ["temporalio.activity.defn", "temporalio.workflow.run"]
 
 [tool.basedpyright]
 pythonVersion = "3.14"

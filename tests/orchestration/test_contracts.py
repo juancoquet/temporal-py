@@ -2,12 +2,10 @@
 
 import pytest
 
-from src.activities.example_plan.contract import (
-    EXAMPLE_PLAN_ACTIVITY,
-    ExamplePlan,
-    ExampleRequest,
-)
-from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY, ExampleResult
+from src.activities.example_plan.contract import EXAMPLE_PLAN_ACTIVITY
+from src.activities.example_plan.models import ExamplePlan, ExampleRequest
+from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
+from src.activities.example_process.models import ExampleResult
 from src.activities.names import ActivityName
 from src.orchestration.contracts import WorkflowId
 from src.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
