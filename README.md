@@ -101,7 +101,7 @@ Requires [uv](https://docs.astral.sh/uv/) and Python 3.14.
 ```bash
 uv sync       # create the environment
 make check    # basedpyright + ruff (lint + format)
-make test     # runs the suite; the end-to-end test starts Temporal's in-memory test server
+uv run pytest # runs the suite; the end-to-end test starts Temporal's in-memory test server
 ```
 
 Run each worker against a local dev server (`temporal server start-dev`), each in its own process:
