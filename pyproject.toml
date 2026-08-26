@@ -1,0 +1,83 @@
+[project]
+name = "temporal-py"
+version = "0.1.0"
+description = "A reference template for a Temporal (Python) orchestration layer: import-light contracts and one directory per activity/workflow."
+readme = "README.md"
+requires-python = "==3.14.*"
+dependencies = [
+    "pydantic>=2.13.4",
+    "temporalio>=1.32.0",
+]
+
+[dependency-groups]
+dev = [
+    "basedpyright>=1.39.0",
+    "pytest>=9.0.3",
+    "pytest-asyncio>=1.4.0",
+    "pytest-xdist>=3.8.0",
+    "ruff>=0.15.12",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.6,<0.12.0"]
+build-backend = "uv_build"
+
+# `src` is itself the import package, so first-party imports read `from src.…`.
+[tool.uv.build-backend]
+module-name = "src"
+module-root = ""
+
+[tool.ruff]
+line-length = 100
+lint.select = ["ALL"]
+lint.ignore = [
+    "COM812",
+    "CPY",  # no per-file copyright header requirement
+    "D",    # docstrings by discretion, not forced on every public symbol
+    "EM101",
+    "EM102",
+    "FIX",
+    "G004",
+    "RET504",
+    "TD",
+    "TRY003",
+    "TRY300",
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/**/*.py" = [
+    "S101",     # asserts are the point of a test
+    "FBT",      # boolean args are fine in fakes/fixtures
+    "PLR2004",  # magic values in comparisons read fine in tests
+    "T201",     # allow print
+    "S311",     # pseudo-random is fine in tests
+    "ANN201",   # return types not required on test functions
+    "ANN401",   # fakes may mirror Any-typed third-party signatures
+    "ARG002",   # protocol-satisfying fakes accept args they don't use
+    "N818",     # short throwaway exception names are fine in tests
+    "TC",       # fakes use runtime annotations; TYPE_CHECKING-only imports would break them
+    "SIM117",   # nested `with` blocks read fine in test setup
+]
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "src.primitives.FrozenBaseModel"]
+runtime-evaluated-decorators = [
+    "dataclasses.dataclass",
+    "temporalio.activity.defn",
+    "temporalio.workflow.run",
+]
+
+[tool.basedpyright]
+pythonVersion = "3.14"
+typeCheckingMode = "all"
+include = ["src", "tests"]
+reportMissingTypeStubs = false
+reportUnusedCallResult = false
+reportUnannotatedClassAttribute = false
+executionEnvironments = [
+    { root = "tests", reportPrivateUsage = false, reportAny = false, reportExplicitAny = false, reportImplicitOverride = false, reportUnusedParameter = false },
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
