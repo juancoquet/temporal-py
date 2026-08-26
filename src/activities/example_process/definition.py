@@ -10,7 +10,7 @@ from temporalio import activity
 
 from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
 from src.example.models import ExampleItem, ExampleResult
-from src.example.service import ExampleService
+from src.example.ports import ExampleService
 
 
 @dataclass

@@ -1,8 +1,7 @@
 """Shared worker-construction helpers, called by each activity's / workflow's ``worker.py``.
 
-Construction lives beside each unit (in its ``worker.py``); these helpers keep the Temporal wiring —
-the task queue, and the sandboxed runner on every workflow — uniform and in one place, so no worker
-can be built without them.
+Construction lives beside each unit (in its ``worker.py``); these helpers derive the task queue from
+the contract, so no worker can be built without one.
 """
 
 from __future__ import annotations
@@ -11,7 +10,6 @@ from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING
 
 from temporalio.worker import Worker
-from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner, SandboxRestrictions
 
 from src.primitives import FrozenBaseModel
 
@@ -25,14 +23,6 @@ if TYPE_CHECKING:
 type ActivityImpl[TIn: FrozenBaseModel, TOut: FrozenBaseModel] = Callable[
     [TIn], TOut | Awaitable[TOut]
 ]
-
-# The workflow sandbox is left on (it catches accidental non-determinism in workflow code). If
-# importing your app package under the sandbox trips on an import-time side effect the sandbox
-# rejects (e.g. logging setup that touches `random`), pass *only* that module through here —
-# `SandboxRestrictions.default.with_passthrough_modules("your.module")` — so the workflow
-# definitions themselves stay sandboxed. The standing determinism gate is a replay test, not this
-# import sandbox.
-_WORKFLOW_RUNNER = SandboxedWorkflowRunner(restrictions=SandboxRestrictions.default)
 
 
 def build_activity_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
@@ -56,10 +46,9 @@ def build_workflow_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
     contract: WorkflowContract[TIn, TOut],
     definition: type[object],
 ) -> Worker:
-    """Build the worker for one workflow — its queue, the definition, and the sandbox runner."""
+    """Build the worker for one workflow — its queue and definition (Temporal sandboxes it)."""
     return Worker(
         client,
         task_queue=contract.queue,
         workflows=[definition],
-        workflow_runner=_WORKFLOW_RUNNER,
     )

@@ -15,7 +15,7 @@ src/
   primitives.py              # FrozenBaseModel, NonEmptyStr, NOT_GIVEN/was_given — no Temporal import
   orchestration/             # THE REUSABLE KIT — app-agnostic; copy this into any repo
     contracts.py             # ActivityContract / WorkflowContract bases
-    worker.py                # build_activity_worker / build_workflow_worker (+ the workflow sandbox)
+    worker.py                # build_activity_worker / build_workflow_worker
     client.py                # build_client — the Temporal client (hardcoded local target here)
   example/                   # YOUR domain / impl code (worked example) — no Temporal dependency
     models.py                #   domain models, imported by the contracts, definitions, and workflow
@@ -91,8 +91,8 @@ These are the load-bearing choices. Change them only deliberately.
    and calls activities by name, never an implementation; use `workflow.now` / `workflow.random` /
    `workflow.uuid4` for time and randomness. Workflows run under Temporal's sandbox (on by default).
    If importing your app package under the sandbox ever trips on an import-time side effect (e.g.
-   logging setup that touches `random`), pass *only* that module through in `orchestration/worker.py`,
-   keeping the definitions themselves sandboxed.
+   logging setup that touches `random`), give the workflow worker a `SandboxedWorkflowRunner` that
+   passes *only* that module through, keeping the definitions themselves sandboxed.
 
 ## Running it
 

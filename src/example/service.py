@@ -1,23 +1,20 @@
-"""The example domain service — a port and a trivial implementation.
+"""An implementation of the example service port.
 
-In a real app this is your business logic: a loaded model, a provider client, a database gateway.
-It knows nothing about Temporal. The ``example_process`` activity injects it (built once per worker)
-and calls it; swapping the implementation never touches the orchestration layer.
+The implementation satisfies :class:`~src.example.ports.ExampleService` *structurally* — it has the
+right method and never imports or inherits the protocol. Only the factory's return type names the
+port, so callers depend on the interface, not this class.
 """
 
-from dataclasses import dataclass
-from typing import Protocol
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from src.example.models import ExampleItem, ExampleResult
 
-
-class ExampleService(Protocol):
-    """The port the process activity depends on — an injected collaborator."""
-
-    async def handle(self, item: ExampleItem) -> ExampleResult: ...
+if TYPE_CHECKING:
+    from src.example.ports import ExampleService
 
 
-@dataclass
 class _EchoService:
     """A trivial implementation standing in for real business logic."""
 
