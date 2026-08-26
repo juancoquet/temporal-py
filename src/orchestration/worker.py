@@ -32,7 +32,7 @@ def build_activity_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
     *,
     executor: Executor | None = None,  # required for a sync (e.g. blocking / GPU) activity
 ) -> Worker:
-    """Build the worker for one activity — its queue and the impl."""
+    """Build the worker for one activity: its queue and the impl."""
     return Worker(
         client,
         task_queue=contract.queue,
@@ -46,7 +46,7 @@ def build_workflow_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
     contract: WorkflowContract[TIn, TOut],
     definition: type[object],
 ) -> Worker:
-    """Build the worker for one workflow — its queue and definition (Temporal sandboxes it)."""
+    """Build the worker for one workflow: its queue and definition (Temporal sandboxes it)."""
     return Worker(
         client,
         task_queue=contract.queue,

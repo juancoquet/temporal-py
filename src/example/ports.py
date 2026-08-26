@@ -1,4 +1,4 @@
-"""The ports the example domain exposes — the interfaces its consumers depend on."""
+"""The ports the example domain exposes: the interfaces its consumers depend on."""
 
 from __future__ import annotations
 
@@ -9,6 +9,6 @@ if TYPE_CHECKING:
 
 
 class ExampleService(Protocol):
-    """The port the process activity depends on — an injected collaborator."""
+    """The port the process activity depends on: an injected collaborator."""
 
     async def handle(self, item: ExampleItem) -> ExampleResult: ...

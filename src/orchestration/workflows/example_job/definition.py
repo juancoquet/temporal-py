@@ -1,4 +1,4 @@
-"""The ``example_job`` workflow implementation — orchestration only, no heavy or task imports.
+"""The ``example_job`` workflow implementation: orchestration only, no heavy or task imports.
 
 Workflow code stays pure and import-light for determinism: it imports activity *contracts* and calls
 them by name, never an implementation, plus the domain models it passes and returns. Where
@@ -15,7 +15,7 @@ from src.orchestration.workflows.example_job.contract import EXAMPLE_JOB_WORKFLO
 
 @workflow.defn(name=EXAMPLE_JOB_WORKFLOW.name)
 class ExampleJob:
-    """Template workflow — dispatches its activities through their contracts."""
+    """Template workflow: dispatches its activities through their contracts."""
 
     @workflow.run
     async def run(self, request: ExampleRequest) -> ExampleResult:

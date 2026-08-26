@@ -1,4 +1,4 @@
-"""The closed, typed set of workflow names — the string keys that cross the worker boundary."""
+"""The closed, typed set of workflow names: the string keys that cross the worker boundary."""
 
 import enum
 

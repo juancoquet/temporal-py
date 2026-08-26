@@ -1,4 +1,4 @@
-"""The ``example_plan`` activity's contract — the import-light dispatch seam.
+"""The ``example_plan`` activity's contract: the import-light dispatch interface.
 
 The boundary types live in ``models.py`` and are imported here; a workflow imports this contract to
 dispatch the activity by name without importing the implementation.

@@ -1,6 +1,6 @@
-"""The generic, import-light contract seam: the base activity and workflow contracts.
+"""The generic, import-light activity and workflow contracts.
 
-A caller — a workflow, or a starter — imports a concrete contract and dispatches by string name with
+A caller (a workflow, or a starter) imports a concrete contract and dispatches by string name with
 ``result_type``, recovering static typing across the environment boundary without importing the
 implementation. The ``name`` is a plain ``str`` so this kit stays app-agnostic; your app defines a
 `StrEnum` of names and passes its members here (a `StrEnum` member *is* a ``str``), which gives the

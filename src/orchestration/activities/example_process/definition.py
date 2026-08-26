@@ -1,4 +1,4 @@
-"""The ``example_process`` activity — the Temporal adapter over the example domain service.
+"""The ``example_process`` activity: the Temporal adapter over the example domain service.
 
 The activity holds no business logic: it injects the domain service (from ``src.example``, built
 once per worker) and calls it. The heavy/domain code lives in ``src.example``, not here.

@@ -15,7 +15,7 @@ class ExampleRequest(FrozenBaseModel):
 
 
 class ExampleItem(FrozenBaseModel):
-    """A unit of fanned-out work — the plan's items, and the process step's input."""
+    """A unit of fanned-out work: the plan's items, and the process step's input."""
 
     work_id: NonEmptyStr
     index: int

@@ -1,4 +1,4 @@
-"""The ``example_job`` workflow's contract — dispatched by name, id derived from the payload.
+"""The ``example_job`` workflow's contract: dispatched by name, id derived from the payload.
 
 Its argument and result types are the domain models, imported from ``src.example``.
 """

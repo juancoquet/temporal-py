@@ -1,4 +1,4 @@
-"""How the ``example_process`` worker is built — collaborator injected once, colocated here."""
+"""How the ``example_process`` worker is built: collaborator injected once, colocated here."""
 
 from __future__ import annotations
 

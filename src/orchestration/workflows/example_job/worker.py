@@ -1,4 +1,4 @@
-"""How the ``example_job`` workflow worker is built — colocated with the workflow."""
+"""How the ``example_job`` workflow worker is built: colocated with the workflow."""
 
 from __future__ import annotations
 

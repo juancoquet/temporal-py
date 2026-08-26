@@ -1,4 +1,4 @@
-"""Worker entrypoint for the ``example_plan`` activity — its image runs this module.
+"""Worker entrypoint for the ``example_plan`` activity: its image runs this module.
 
 python -m src.orchestration.activities.example_plan.serve
 """

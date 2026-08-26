@@ -1,4 +1,4 @@
-"""How the ``example_plan`` worker is built — this activity's construction, colocated with it."""
+"""How the ``example_plan`` worker is built: this activity's construction, colocated with it."""
 
 from __future__ import annotations
 

@@ -1,4 +1,4 @@
-"""Worker entrypoint for the ``example_job`` workflow — its image runs this module.
+"""Worker entrypoint for the ``example_job`` workflow: its image runs this module.
 
 python -m src.orchestration.workflows.example_job.serve
 """
