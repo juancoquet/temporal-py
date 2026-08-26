@@ -3,9 +3,9 @@
 import os
 from functools import cache
 
+from dotenv import load_dotenv
 from pydantic import AnyUrl, field_validator
 
-from src.config.env import load_env
 from src.primitives import FrozenBaseModel, NonEmptyStr
 
 
@@ -42,7 +42,7 @@ class TemporalConfig(FrozenBaseModel):
 @cache
 def production_temporal_config() -> TemporalConfig:
     """Build the Temporal connection config from the environment, once per process."""
-    load_env()
+    load_dotenv()  # local dev reads a repo-root .env; a no-op when the file is absent
     return TemporalConfig(
         endpoint=AnyUrl(os.environ["TEMPORAL_ENDPOINT"]),
         namespace=os.environ["TEMPORAL_NAMESPACE"],

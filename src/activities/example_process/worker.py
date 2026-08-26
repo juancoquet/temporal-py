@@ -5,10 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
-from src.activities.example_process.definition import (
-    ExampleActivities,
-    production_example_service,
-)
+from src.activities.example_process.definition import ExampleActivities
+from src.example.service import production_example_service
 from src.orchestration.worker import build_activity_worker
 
 if TYPE_CHECKING:

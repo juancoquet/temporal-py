@@ -8,9 +8,8 @@ wall-clock or randomness is needed, use ``workflow.now`` / ``workflow.random`` /
 from temporalio import workflow
 
 from src.activities.example_plan.contract import EXAMPLE_PLAN_ACTIVITY
-from src.activities.example_plan.models import ExampleRequest
 from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
-from src.activities.example_process.models import ExampleResult
+from src.example.models import ExampleRequest, ExampleResult
 from src.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
 
 

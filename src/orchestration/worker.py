@@ -1,8 +1,8 @@
 """Shared worker-construction helpers, called by each activity's / workflow's ``worker.py``.
 
 Construction lives beside each unit (in its ``worker.py``); these helpers keep the Temporal wiring —
-the task queue, the ``PanicInterceptor`` on every activity, the sandboxed runner on every workflow —
-uniform and in one place, so no worker can be built without them.
+the task queue, and the sandboxed runner on every workflow — uniform and in one place, so no worker
+can be built without them.
 """
 
 from __future__ import annotations
@@ -13,7 +13,6 @@ from typing import TYPE_CHECKING
 from temporalio.worker import Worker
 from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner, SandboxRestrictions
 
-from src.orchestration.interceptor import PanicInterceptor
 from src.primitives import FrozenBaseModel
 
 if TYPE_CHECKING:
@@ -43,12 +42,11 @@ def build_activity_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
     *,
     executor: Executor | None = None,  # required for a sync (e.g. blocking / GPU) activity
 ) -> Worker:
-    """Build the worker for one activity — its queue, the impl, and the Panic seam."""
+    """Build the worker for one activity — its queue and the impl."""
     return Worker(
         client,
         task_queue=contract.queue,
         activities=[impl],
-        interceptors=[PanicInterceptor()],
         activity_executor=executor,
     )
 

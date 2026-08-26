@@ -1,4 +1,4 @@
-"""The generic, import-light contract seam: the base contracts and the workflow id.
+"""The generic, import-light contract seam: the base activity and workflow contracts.
 
 A caller — a workflow, or a starter — imports a concrete contract and dispatches by string name with
 ``result_type``, recovering static typing across the environment boundary without importing the
@@ -15,7 +15,7 @@ from typing import TYPE_CHECKING
 
 from temporalio import workflow
 
-from src.primitives import NOT_GIVEN, FrozenBaseModel, Id, NotGiven, was_given
+from src.primitives import NOT_GIVEN, FrozenBaseModel, NotGiven, was_given
 
 if TYPE_CHECKING:
     from temporalio.client import Client
@@ -53,23 +53,19 @@ class ActivityContract[TIn: FrozenBaseModel, TOut: FrozenBaseModel](FrozenBaseMo
         )
 
 
-class WorkflowId(Id, prefix="wf"):
-    """A Temporal workflow id — a caller-assigned, deduplicating business key."""
-
-
 class WorkflowContract[TIn: FrozenBaseModel, TOut: FrozenBaseModel](FrozenBaseModel):
     """A typed handle to one workflow, dispatched by string name.
 
     Carries the workflow's name, its argument and result types, a ``key`` that derives the workflow
-    id from the payload, and its execution timeout, and derives the task queue its worker polls.
-    :meth:`start` launches it from a client (the entrypoint); :meth:`execute_as_child` launches it
-    as a child from within another workflow.
+    id (a deduplicating business key) from the payload, and its execution timeout, and derives the
+    task queue its worker polls. :meth:`start` launches it from a client (the entrypoint);
+    :meth:`execute_as_child` launches it as a child from within another workflow.
     """
 
     name: str
     arg: type[TIn]
     out: type[TOut]
-    key: Callable[[TIn], WorkflowId]  # derive the workflow id from the payload
+    key: Callable[[TIn], str]  # derive the workflow id from the payload
     execution_timeout: timedelta = timedelta(hours=1)
 
     @property
@@ -77,15 +73,13 @@ class WorkflowContract[TIn: FrozenBaseModel, TOut: FrozenBaseModel](FrozenBaseMo
         """The task queue this workflow's worker polls."""
         return f"{self.name}_queue"
 
-    async def execute_as_child(
-        self, arg: TIn, *, workflow_id: WorkflowId | NotGiven = NOT_GIVEN
-    ) -> TOut:
+    async def execute_as_child(self, arg: TIn, *, workflow_id: str | NotGiven = NOT_GIVEN) -> TOut:
         """Start this workflow as a child from within a parent workflow, and await its result."""
         return self.out.model_validate(
             await workflow.execute_child_workflow(
                 self.name,
                 arg,
-                id=str(self._wid(arg, workflow_id)),
+                id=self._wid(arg, workflow_id),
                 task_queue=self.queue,
                 result_type=self.out,
                 execution_timeout=self.execution_timeout,
@@ -93,21 +87,21 @@ class WorkflowContract[TIn: FrozenBaseModel, TOut: FrozenBaseModel](FrozenBaseMo
         )
 
     async def start(
-        self, client: Client, arg: TIn, *, workflow_id: WorkflowId | NotGiven = NOT_GIVEN
+        self, client: Client, arg: TIn, *, workflow_id: str | NotGiven = NOT_GIVEN
     ) -> TOut:
         """Start this workflow from a client and await its result."""
         return self.out.model_validate(
             await client.execute_workflow(
                 self.name,
                 arg,
-                id=str(self._wid(arg, workflow_id)),
+                id=self._wid(arg, workflow_id),
                 task_queue=self.queue,
                 result_type=self.out,
                 execution_timeout=self.execution_timeout,
             )
         )
 
-    def _wid(self, arg: TIn, workflow_id: WorkflowId | NotGiven) -> WorkflowId:
+    def _wid(self, arg: TIn, workflow_id: str | NotGiven) -> str:
         # workflow_id overrides the derived id: to run several workflows of this type for one
         # payload (which would otherwise collide on the same id), or to re-run under a chosen id.
         return workflow_id if was_given(workflow_id) else self.key(arg)

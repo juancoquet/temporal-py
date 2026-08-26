@@ -1,23 +1,21 @@
 """End-to-end: the example workflow runs across per-activity queues under a real (in-memory) server.
 
-Marked ``medium`` — it starts Temporal's in-memory time-skipping test server (a one-time binary
-fetch), so it is not part of the hermetic ``small`` suite. Run with ``uv run pytest -m medium``.
+Starts Temporal's in-memory time-skipping test server (a one-time binary fetch on first run), stands
+up each unit's worker, and runs the workflow to completion.
 """
 
 from contextlib import AsyncExitStack
 
-import pytest
 from temporalio.contrib.pydantic import pydantic_data_converter
 from temporalio.testing import WorkflowEnvironment
 
-from src.activities.example_plan.models import ExampleRequest
 from src.activities.example_plan.worker import build_worker as build_plan_worker
 from src.activities.example_process.worker import build_worker as build_process_worker
+from src.example.models import ExampleRequest
 from src.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
 from src.workflows.example_job.worker import build_worker as build_job_worker
 
 
-@pytest.mark.medium
 async def test_example_job_runs_end_to_end():
     async with await WorkflowEnvironment.start_time_skipping(
         data_converter=pydantic_data_converter

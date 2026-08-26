@@ -7,7 +7,7 @@ image imports only its own activity's ``definition``, those imports never meet a
 from temporalio import activity
 
 from src.activities.example_plan.contract import EXAMPLE_PLAN_ACTIVITY
-from src.activities.example_plan.models import ExampleItem, ExamplePlan, ExampleRequest
+from src.example.models import ExampleItem, ExamplePlan, ExampleRequest
 
 
 @activity.defn(name=EXAMPLE_PLAN_ACTIVITY.name)
