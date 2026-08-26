@@ -15,6 +15,7 @@ src/
   primitives.py              # FrozenBaseModel, NonEmptyStr, NOT_GIVEN/was_given (no Temporal import)
   example/                   # YOUR domain / impl code (worked example); no Temporal dependency
     models.py                #   domain models, imported by the contracts, definitions, and workflow
+    plan.py                  #   a plain domain function (build_plan) the plan activity wraps
     ports.py                 #   the service port (a Protocol)
     service.py               #   a concrete implementation of the port, plus its factory
   orchestration/             # THE TEMPORAL LAYER
