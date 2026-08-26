@@ -28,7 +28,7 @@ src/
       contract.py            #   the import-light dispatch seam (workflows import this)
       definition.py          #   the @activity.defn — the only module that imports the real work
       worker.py              #   build_worker(client) -> Worker — this activity's construction
-      serve.py               #   entrypoint shim -> orchestration.serve.run(build_worker)
+      serve.py               #   the entrypoint: build the client, build the worker, run it
     example_process/         # a second activity, with a constructor-injected collaborator
   workflows/                 # YOUR workflows (worked example here)
     names.py                 # WorkflowName
@@ -127,7 +127,7 @@ workflow id is derived from the payload by the contract's `key`.
    - `contract.py` — an `ActivityContract` instance over those models;
    - `definition.py` — the `@activity.defn`, importing your real work;
    - `worker.py` — `build_worker(client)` over `build_activity_worker`;
-   - `serve.py` — a thin `python -m …serve` shim that calls the shared `orchestration.serve.run`.
+   - `serve.py` — the `python -m …serve` entrypoint: `build_client()`, `build_worker(client)`, run.
 3. Dispatch it from a workflow via its contract's `execute`.
 
 Adding a workflow is the same shape under `src/workflows/`, dispatching activities by contract.

@@ -7,7 +7,7 @@ from src.config.temporal import TemporalConfig, production_temporal_config
 from src.primitives import NOT_GIVEN, NotGiven, was_given
 
 
-async def production_temporal_client(config: TemporalConfig | NotGiven = NOT_GIVEN) -> Client:
+async def build_client(config: TemporalConfig | NotGiven = NOT_GIVEN) -> Client:
     """Connect a Temporal client that serialises payloads through pydantic.
 
     The pydantic data converter carries :class:`~src.primitives.FrozenBaseModel` arguments and
