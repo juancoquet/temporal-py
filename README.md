@@ -49,7 +49,7 @@ the count — enough to exercise the whole path end to end.
 
 ## Key decisions
 
-These are the load-bearing choices. Change them only deliberately.
+These are the choices that shape everything else; change them deliberately.
 
 1. **Contract and definition are separate modules.** The *contract* (`contract.py`) is the
    import-light seam a workflow imports to dispatch by string name — it carries the name, the
