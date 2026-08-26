@@ -13,12 +13,10 @@ own, and you have a working, type-checked, testable skeleton.
 ```
 src/
   primitives.py              # FrozenBaseModel, NonEmptyStr, NOT_GIVEN/was_given — no Temporal import
-  config/
-    temporal.py              # TemporalConfig (endpoint + namespace), read from the environment
   orchestration/             # THE REUSABLE KIT — app-agnostic; copy this into any repo
     contracts.py             # ActivityContract / WorkflowContract bases
     worker.py                # build_activity_worker / build_workflow_worker (+ the workflow sandbox)
-    client.py                # build_client — the Temporal client (pydantic data converter)
+    client.py                # build_client — the Temporal client (hardcoded local target here)
   example/                   # YOUR domain / impl code (worked example) — no Temporal dependency
     models.py                #   domain models, imported by the contracts, definitions, and workflow
     service.py               #   a domain service (a port + an implementation + its factory)

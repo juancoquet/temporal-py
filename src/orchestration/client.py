@@ -3,23 +3,17 @@
 from temporalio.client import Client
 from temporalio.contrib.pydantic import pydantic_data_converter
 
-from src.config.temporal import TemporalConfig, production_temporal_config
-from src.primitives import NOT_GIVEN, NotGiven, was_given
+# Hardcoded: this is example code and none of it is sensitive. A real app reads these from the
+# environment. The pydantic data converter carries FrozenBaseModel payloads across the wire with
+# their types intact, so the typed contracts recover static typing on the far side.
+_TARGET = "localhost:7233"
+_NAMESPACE = "default"
 
 
-async def build_client(config: TemporalConfig | NotGiven = NOT_GIVEN) -> Client:
-    """Connect a Temporal client that serialises payloads through pydantic.
-
-    The pydantic data converter carries :class:`~src.primitives.FrozenBaseModel` arguments and
-    results across the wire with their types intact, so the typed contracts recover static typing on
-    the far side of the environment boundary.
-
-    Args:
-        config: Connection details; defaults to the process environment's.
-    """
-    resolved = config if was_given(config) else production_temporal_config()
+async def build_client() -> Client:
+    """Connect a Temporal client that serialises payloads through pydantic."""
     return await Client.connect(
-        resolved.target,
-        namespace=resolved.namespace,
+        _TARGET,
+        namespace=_NAMESPACE,
         data_converter=pydantic_data_converter,
     )
