@@ -8,9 +8,9 @@ from dataclasses import dataclass
 
 from temporalio import activity
 
-from src.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
 from src.example.models import ExampleItem, ExampleResult
 from src.example.ports import ExampleService
+from src.orchestration.activities.example_process.contract import EXAMPLE_PROCESS_ACTIVITY
 
 
 @dataclass

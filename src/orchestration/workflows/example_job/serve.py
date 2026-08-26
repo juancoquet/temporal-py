@@ -1,13 +1,13 @@
 """Worker entrypoint for the ``example_job`` workflow — its image runs this module.
 
-python -m src.workflows.example_job.serve
+python -m src.orchestration.workflows.example_job.serve
 """
 
 import asyncio
 import logging
 
 from src.orchestration.client import build_client
-from src.workflows.example_job.worker import build_worker
+from src.orchestration.workflows.example_job.worker import build_worker
 
 _logger = logging.getLogger(__name__)
 

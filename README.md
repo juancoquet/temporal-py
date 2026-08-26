@@ -13,40 +13,39 @@ own, and you have a working, type-checked, testable skeleton.
 ```
 src/
   primitives.py              # FrozenBaseModel, NonEmptyStr, NOT_GIVEN/was_given — no Temporal import
-  orchestration/             # THE REUSABLE KIT — app-agnostic; copy this into any repo
-    contracts.py             # ActivityContract / WorkflowContract bases
-    worker.py                # build_activity_worker / build_workflow_worker
-    client.py                # build_client — the Temporal client (hardcoded local target here)
   example/                   # YOUR domain / impl code (worked example) — no Temporal dependency
     models.py                #   domain models, imported by the contracts, definitions, and workflow
-    service.py               #   a domain service (a port + an implementation + its factory)
-  activities/                # Temporal adapters over the domain — one directory per activity
-    names.py                 # ActivityName — the closed, typed set of activity names
-    example_plan/
-      contract.py            #   the import-light dispatch seam (workflows import this)
-      definition.py          #   the @activity.defn wrapping the domain code
-      worker.py              #   build_worker(client) -> Worker — this activity's construction
-      serve.py               #   the entrypoint: build the client, build the worker, run it
-    example_process/         # a second activity, injecting the domain service
-  workflows/                 # Temporal adapters — one directory per workflow
-    names.py                 # WorkflowName
-    example_job/             # same four-module layout as an activity
-      { contract, definition, worker, serve }.py
+    ports.py                 #   the service port (a Protocol)
+    service.py               #   a concrete implementation of the port + its factory
+  orchestration/             # THE TEMPORAL LAYER
+    contracts.py             # ActivityContract / WorkflowContract bases (the reusable seam)
+    worker.py                # build_activity_worker / build_workflow_worker
+    client.py                # build_client — the Temporal client (hardcoded local target here)
+    activities/              # one directory per activity, each an adapter over the domain
+      names.py               #   ActivityName — the closed, typed set of activity names
+      example_plan/
+        contract.py          #     the import-light dispatch seam (workflows import this)
+        definition.py        #     the @activity.defn wrapping the domain code
+        worker.py            #     build_worker(client) -> Worker — this activity's construction
+        serve.py             #     the entrypoint: build the client, build the worker, run it
+      example_process/       #   a second activity, injecting the domain service
+    workflows/               # one directory per workflow
+      names.py               #   WorkflowName
+      example_job/           #   same four-module layout as an activity
+        { contract, definition, worker, serve }.py
 tests/
 ```
 
 The example workflow (`example_job`) plans two items, fans them out to `example_process`, and reports
 the count — enough to exercise the whole path end to end.
 
-## The three areas
+## The two sides
 
-- **`src/orchestration/` — the kit.** App-agnostic: it defines *how* activities and workflows are
-  dispatched (contracts), served (worker helpers), and connected (client). It names no specific
-  activity or workflow. You reuse it verbatim.
-- **`src/example/` — the domain.** Your models and business logic, with no dependency on Temporal or
-  the kit. In a real app this is many packages; here it's one.
-- **`src/activities/`, `src/workflows/` — the adapters.** Thin Temporal wrappers over the domain.
-  They depend on the domain and the kit; neither depends on them.
+- **`src/example/` — the domain.** Your models and business logic, with no dependency on Temporal.
+  In a real app this is many packages; here it's one.
+- **`src/orchestration/` — the Temporal layer.** The reusable seam (`contracts.py`, `worker.py`,
+  `client.py`) plus, under `activities/` and `workflows/`, one directory per unit — thin adapters
+  that wrap the domain. Orchestration depends on the domain, never the reverse.
 
 ## Key decisions
 
@@ -107,9 +106,9 @@ uv run pytest # runs the suite; the end-to-end test starts Temporal's in-memory 
 Run each worker against a local dev server (`temporal server start-dev`), each in its own process:
 
 ```bash
-uv run python -m src.workflows.example_job.serve
-uv run python -m src.activities.example_plan.serve
-uv run python -m src.activities.example_process.serve
+uv run python -m src.orchestration.workflows.example_job.serve
+uv run python -m src.orchestration.activities.example_plan.serve
+uv run python -m src.orchestration.activities.example_process.serve
 ```
 
 Then start a run from a client (`EXAMPLE_JOB_WORKFLOW.start(client, ExampleRequest(...))`); the
@@ -119,15 +118,16 @@ workflow id is derived from the payload by the contract's `key`.
 
 1. Put its types and logic in your domain (`src/example/` here): the model(s) in `models.py`, any
    service in `service.py`.
-2. Add a member to `src/activities/names.py`.
-3. Create `src/activities/<activity>/` with:
+2. Add a member to `src/orchestration/activities/names.py`.
+3. Create `src/orchestration/activities/<activity>/` with:
    - `contract.py` — an `ActivityContract` instance over the domain types;
    - `definition.py` — the `@activity.defn`, importing the domain code;
    - `worker.py` — `build_worker(client)` over `build_activity_worker`;
    - `serve.py` — the `python -m …serve` entrypoint: `build_client()`, `build_worker(client)`, run.
 4. Dispatch it from a workflow via its contract's `execute`.
 
-Adding a workflow is the same shape under `src/workflows/`, dispatching activities by contract.
+Adding a workflow is the same shape under `src/orchestration/workflows/`, dispatching activities by
+contract.
 
 ## Not included (deliberately)
 

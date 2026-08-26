@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from src.activities.example_plan.contract import EXAMPLE_PLAN_ACTIVITY
-from src.activities.example_plan.definition import example_plan
+from src.orchestration.activities.example_plan.contract import EXAMPLE_PLAN_ACTIVITY
+from src.orchestration.activities.example_plan.definition import example_plan
 from src.orchestration.worker import build_activity_worker
 
 if TYPE_CHECKING:

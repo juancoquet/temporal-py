@@ -6,8 +6,8 @@ dispatch the activity by name without importing the implementation.
 
 from datetime import timedelta
 
-from src.activities.names import ActivityName
 from src.example.models import ExamplePlan, ExampleRequest
+from src.orchestration.activities.names import ActivityName
 from src.orchestration.contracts import ActivityContract
 
 EXAMPLE_PLAN_ACTIVITY: ActivityContract[ExampleRequest, ExamplePlan] = ActivityContract(

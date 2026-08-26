@@ -5,7 +5,7 @@ Its argument and result types are the domain models, imported from ``src.example
 
 from src.example.models import ExampleRequest, ExampleResult
 from src.orchestration.contracts import WorkflowContract
-from src.workflows.names import WorkflowName
+from src.orchestration.workflows.names import WorkflowName
 
 EXAMPLE_JOB_WORKFLOW: WorkflowContract[ExampleRequest, ExampleResult] = WorkflowContract(
     name=WorkflowName.EXAMPLE_JOB,

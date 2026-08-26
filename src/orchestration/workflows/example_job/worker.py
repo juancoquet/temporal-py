@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from src.orchestration.worker import build_workflow_worker
-from src.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
-from src.workflows.example_job.definition import ExampleJob
+from src.orchestration.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
+from src.orchestration.workflows.example_job.definition import ExampleJob
 
 if TYPE_CHECKING:
     from temporalio.client import Client

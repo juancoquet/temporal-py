@@ -9,11 +9,11 @@ from contextlib import AsyncExitStack
 from temporalio.contrib.pydantic import pydantic_data_converter
 from temporalio.testing import WorkflowEnvironment
 
-from src.activities.example_plan.worker import build_worker as build_plan_worker
-from src.activities.example_process.worker import build_worker as build_process_worker
 from src.example.models import ExampleRequest
-from src.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
-from src.workflows.example_job.worker import build_worker as build_job_worker
+from src.orchestration.activities.example_plan.worker import build_worker as build_plan_worker
+from src.orchestration.activities.example_process.worker import build_worker as build_process_worker
+from src.orchestration.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
+from src.orchestration.workflows.example_job.worker import build_worker as build_job_worker
 
 
 async def test_example_job_runs_end_to_end():
