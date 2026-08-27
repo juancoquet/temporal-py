@@ -6,7 +6,6 @@ up each unit's worker, and runs the workflow to completion.
 
 from contextlib import AsyncExitStack
 
-import pytest
 from temporalio.testing import WorkflowEnvironment
 
 from src.example.models import ExampleRequest
@@ -17,7 +16,6 @@ from src.orchestration.workflows.example_job.contract import EXAMPLE_JOB_WORKFLO
 from src.orchestration.workflows.example_job.worker import build_worker as build_job_worker
 
 
-@pytest.mark.medium
 async def test_example_job_runs_end_to_end():
     async with await WorkflowEnvironment.start_time_skipping(
         data_converter=orchestration_data_converter

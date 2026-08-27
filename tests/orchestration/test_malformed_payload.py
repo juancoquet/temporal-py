@@ -27,7 +27,6 @@ _MALFORMED_WORKFLOW_OUTPUT = "malformed_workflow_output_test"
 _MALFORMED_WORKFLOW_OUTPUT_QUEUE = f"{_MALFORMED_WORKFLOW_OUTPUT}_queue"
 
 
-@pytest.mark.medium
 async def test_malformed_workflow_input_is_non_retryable():
     async with await WorkflowEnvironment.start_time_skipping(
         data_converter=orchestration_data_converter
@@ -49,7 +48,6 @@ async def test_malformed_workflow_input_is_non_retryable():
     assert error.non_retryable
 
 
-@pytest.mark.medium
 async def test_malformed_activity_input_is_non_retryable():
     async with await WorkflowEnvironment.start_time_skipping(
         data_converter=orchestration_data_converter
@@ -79,7 +77,6 @@ async def test_malformed_activity_input_is_non_retryable():
     assert error.non_retryable
 
 
-@pytest.mark.medium
 async def test_malformed_workflow_output_is_non_retryable():
     async with await WorkflowEnvironment.start_time_skipping(
         data_converter=orchestration_data_converter
@@ -101,7 +98,6 @@ async def test_malformed_workflow_output_is_non_retryable():
     assert raised.value.non_retryable
 
 
-@pytest.mark.medium
 async def test_malformed_activity_output_is_non_retryable():
     async with await WorkflowEnvironment.start_time_skipping(
         data_converter=orchestration_data_converter

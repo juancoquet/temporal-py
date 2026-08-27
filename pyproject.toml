@@ -81,8 +81,3 @@ executionEnvironments = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
-markers = [
-    "small: hermetic in-process test",
-    "medium: test using localhost, a database, the filesystem, threads, or sleeps",
-    "large: test using non-local network access or an external system",
-]
