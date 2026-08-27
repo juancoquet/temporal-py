@@ -20,6 +20,7 @@ src/
     service.py               #   a concrete implementation of the port, plus its factory
   orchestration/             # THE TEMPORAL LAYER
     contracts.py             # ActivityContract / WorkflowContract bases (reused as-is)
+    converter.py             # typed payload conversion; malformed payloads fail without retrying
     worker.py                # build_activity_worker / build_workflow_worker
     client.py                # build_client: the Temporal client (hardcoded local target here)
     activities/              # one directory per activity, each an adapter over the domain
@@ -92,6 +93,11 @@ the count. That exercises the whole path end to end.
    logging setup that touches `random`), give the workflow worker a `SandboxedWorkflowRunner` that
    passes only that module through, keeping the definitions themselves sandboxed.
 
+9. **Malformed typed payloads are terminal failures.** The data converter translates Pydantic
+   `ValidationError` failures for activity and workflow inputs and outputs into non-retryable Temporal
+   `ApplicationError` failures. Retrying the same malformed payload cannot succeed, so workers fail
+   it immediately rather than repeatedly executing a deterministic validation failure.
+
 ## Running it
 
 Requires [uv](https://docs.astral.sh/uv/) and Python 3.14.
@@ -133,7 +139,7 @@ contract.
 - **A completeness lint:** a check that every `ActivityName` / `WorkflowName` has a directory with
   the expected modules, and no orphan directories. Worth adding once you have more than a handful of
   units; it makes "no declared name goes unserved" a static guarantee.
-- **A failure model, retries-by-policy, observability, persistence:** application concerns to layer
-  on top. (An activity interceptor is where a cross-cutting failure hook would go, if you want one.)
+- **A domain failure model, retries-by-policy, observability, persistence:** application concerns to
+  layer on top. (Malformed Pydantic inputs and outputs are already terminal boundary failures.)
 - **CI, Dockerfiles, IaC, and worker auth:** deployment concerns. The pattern is one image per
   `serve.py`; wire it to your platform.

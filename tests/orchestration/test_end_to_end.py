@@ -6,19 +6,19 @@ up each unit's worker, and runs the workflow to completion.
 
 from contextlib import AsyncExitStack
 
-from temporalio.contrib.pydantic import pydantic_data_converter
 from temporalio.testing import WorkflowEnvironment
 
 from src.example.models import ExampleRequest
 from src.orchestration.activities.example_plan.worker import build_worker as build_plan_worker
 from src.orchestration.activities.example_process.worker import build_worker as build_process_worker
+from src.orchestration.converter import orchestration_data_converter
 from src.orchestration.workflows.example_job.contract import EXAMPLE_JOB_WORKFLOW
 from src.orchestration.workflows.example_job.worker import build_worker as build_job_worker
 
 
 async def test_example_job_runs_end_to_end():
     async with await WorkflowEnvironment.start_time_skipping(
-        data_converter=pydantic_data_converter
+        data_converter=orchestration_data_converter
     ) as env:
         async with AsyncExitStack() as stack:
             for build in (build_plan_worker, build_process_worker, build_job_worker):
