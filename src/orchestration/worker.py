@@ -7,7 +7,7 @@ the contract, so no worker can be built without one.
 from __future__ import annotations
 
 from collections.abc import Awaitable, Callable
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol
 
 from temporalio.worker import Worker
 
@@ -23,6 +23,12 @@ if TYPE_CHECKING:
 type ActivityImpl[TIn: FrozenBaseModel, TOut: FrozenBaseModel] = Callable[
     [TIn], TOut | Awaitable[TOut]
 ]
+
+
+class WorkflowImpl[TIn: FrozenBaseModel, TOut: FrozenBaseModel](Protocol):
+    """A workflow definition with one typed input and output."""
+
+    def run(self, arg: TIn, /) -> TOut | Awaitable[TOut]: ...
 
 
 def build_activity_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
@@ -44,7 +50,7 @@ def build_activity_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
 def build_workflow_worker[TIn: FrozenBaseModel, TOut: FrozenBaseModel](
     client: Client,
     contract: WorkflowContract[TIn, TOut],
-    definition: type[object],
+    definition: type[WorkflowImpl[TIn, TOut]],
 ) -> Worker:
     """Build the worker for one workflow: its queue and definition (Temporal sandboxes it)."""
     return Worker(

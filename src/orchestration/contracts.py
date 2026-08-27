@@ -2,9 +2,8 @@
 
 A caller (a workflow, or a starter) imports a concrete contract and dispatches by string name with
 ``result_type``, recovering static typing across the environment boundary without importing the
-implementation. The ``name`` is a plain ``str`` so this kit stays app-agnostic; your app defines a
-`StrEnum` of names and passes its members here (a `StrEnum` member *is* a ``str``), which gives the
-closed, typed, collision-safe set of names at every definition site.
+implementation. ``ActivityName`` and ``WorkflowName`` provide closed, typed, collision-safe sets of
+names; their ``StrEnum`` members pass directly through Temporal's string boundary.
 """
 
 from __future__ import annotations
@@ -15,6 +14,8 @@ from typing import TYPE_CHECKING
 
 from temporalio import workflow
 
+from src.orchestration.activities.names import ActivityName
+from src.orchestration.workflows.names import WorkflowName
 from src.primitives import NOT_GIVEN, FrozenBaseModel, NotGiven, was_given
 
 if TYPE_CHECKING:
@@ -30,7 +31,7 @@ class ActivityContract[TIn: FrozenBaseModel, TOut: FrozenBaseModel](FrozenBaseMo
     implementation.
     """
 
-    name: str
+    name: ActivityName
     arg: type[TIn]
     out: type[TOut]
     start_to_close: timedelta = timedelta(minutes=30)
@@ -62,7 +63,7 @@ class WorkflowContract[TIn: FrozenBaseModel, TOut: FrozenBaseModel](FrozenBaseMo
     :meth:`execute_as_child` launches it as a child from within another workflow.
     """
 
-    name: str
+    name: WorkflowName
     arg: type[TIn]
     out: type[TOut]
     key: Callable[[TIn], str]  # derive the workflow id from the payload
