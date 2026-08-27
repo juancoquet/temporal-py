@@ -93,10 +93,10 @@ the count. That exercises the whole path end to end.
    logging setup that touches `random`), give the workflow worker a `SandboxedWorkflowRunner` that
    passes only that module through, keeping the definitions themselves sandboxed.
 
-9. **Malformed typed inputs are terminal failures.** The data converter translates Pydantic
-   `ValidationError` failures into non-retryable Temporal `ApplicationError` failures. Retrying the
-   same malformed activity or workflow payload cannot succeed, so workers fail it immediately rather
-   than repeatedly executing a deterministic validation failure.
+9. **Malformed typed payloads are terminal failures.** The data converter translates Pydantic
+   `ValidationError` failures for activity and workflow inputs and outputs into non-retryable Temporal
+   `ApplicationError` failures. Retrying the same malformed payload cannot succeed, so workers fail
+   it immediately rather than repeatedly executing a deterministic validation failure.
 
 ## Running it
 
@@ -140,6 +140,6 @@ contract.
   the expected modules, and no orphan directories. Worth adding once you have more than a handful of
   units; it makes "no declared name goes unserved" a static guarantee.
 - **A domain failure model, retries-by-policy, observability, persistence:** application concerns to
-  layer on top. (Malformed Pydantic payloads are already treated as terminal boundary failures.)
+  layer on top. (Malformed Pydantic inputs and outputs are already terminal boundary failures.)
 - **CI, Dockerfiles, IaC, and worker auth:** deployment concerns. The pattern is one image per
   `serve.py`; wire it to your platform.
