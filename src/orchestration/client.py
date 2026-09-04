@@ -21,13 +21,15 @@ class TemporalConnection(FrozenBaseModel):
 
 
 def load_temporal_connection(
-    environment: dict[str, str] | None = None,
+    target: NonEmptyStr | None = None,
+    namespace: NonEmptyStr | None = None,
 ) -> TemporalConnection:
     """Load connection settings, retaining useful local-development defaults."""
-    source = os.environ if environment is None else environment
-    target = source.get(_TARGET_ENV, _DEFAULT_TARGET)
-    namespace = source.get(_NAMESPACE_ENV, _DEFAULT_NAMESPACE)
-    return TemporalConnection(target=target, namespace=namespace)
+    resolved_target = os.environ.get(_TARGET_ENV, _DEFAULT_TARGET) if target is None else target
+    resolved_namespace = (
+        os.environ.get(_NAMESPACE_ENV, _DEFAULT_NAMESPACE) if namespace is None else namespace
+    )
+    return TemporalConnection(target=resolved_target, namespace=resolved_namespace)
 
 
 async def build_client(connection: TemporalConnection | None = None) -> Client:
