@@ -3,7 +3,6 @@ import pytest
 from src.orchestration.client import TemporalConnection, load_temporal_connection
 
 
-@pytest.mark.small
 def test_temporal_connection_uses_local_defaults():
     with pytest.MonkeyPatch.context() as monkeypatch:
         monkeypatch.delenv("TEMPORAL_TARGET", raising=False)
@@ -15,7 +14,6 @@ def test_temporal_connection_uses_local_defaults():
         )
 
 
-@pytest.mark.small
 def test_temporal_connection_uses_environment():
     with pytest.MonkeyPatch.context() as monkeypatch:
         monkeypatch.setenv("TEMPORAL_TARGET", "temporal.example.test:7233")
@@ -27,7 +25,6 @@ def test_temporal_connection_uses_environment():
         )
 
 
-@pytest.mark.small
 def test_temporal_connection_uses_explicit_values():
     assert load_temporal_connection(
         target="temporal.example.test:7233",
