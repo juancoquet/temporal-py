@@ -20,20 +20,20 @@ src/
     activities/
       names.py
       example_plan/
-        contract.py
-        definition.py
-        worker.py
-        serve.py
-        Dockerfile
+        contract.py                      # Import-light dispatch interface
+        definition.py                    # Activity definition wrapping domain logic
+        worker.py                        # Worker construction
+        serve.py                         # Process entrypoint
+        Dockerfile                       # Deployable image
       example_process/
     workflows/
       names.py
       example_job/
-        contract.py
-        definition.py
-        worker.py
-        serve.py
-        Dockerfile
+        contract.py                      # Import-light dispatch interface
+        definition.py                    # Workflow definition
+        worker.py                        # Worker construction
+        serve.py                         # Process entrypoint
+        Dockerfile                       # Deployable image
 tests/
 compose.yaml                            # Local Temporal server and workers
 docker-bake.hcl                         # Worker image build graph
