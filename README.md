@@ -18,7 +18,7 @@ src/
     worker.py                           # Shared worker construction
     worker-base.Dockerfile              # Shared worker image base
     activities/
-      names.py
+      names.py                           # Closed set of activity names
       example_plan/
         contract.py                      # Import-light dispatch interface
         definition.py                    # Activity definition wrapping domain logic
@@ -27,7 +27,7 @@ src/
         Dockerfile                       # Deployable image
       example_process/
     workflows/
-      names.py
+      names.py                           # Closed set of workflow names
       example_job/
         contract.py                      # Import-light dispatch interface
         definition.py                    # Workflow definition
