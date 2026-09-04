@@ -1,17 +1,11 @@
 """Building the Temporal client shared by workers and workflow starters."""
 
-from __future__ import annotations
-
 import os
-from typing import TYPE_CHECKING
 
 from temporalio.client import Client
 
 from src.orchestration.converter import orchestration_data_converter
 from src.primitives import FrozenBaseModel, NonEmptyStr
-
-if TYPE_CHECKING:
-    from collections.abc import Mapping
 
 _DEFAULT_TARGET = "localhost:7233"
 _DEFAULT_NAMESPACE = "default"
@@ -27,7 +21,7 @@ class TemporalConnection(FrozenBaseModel):
 
 
 def load_temporal_connection(
-    environment: Mapping[str, str] | None = None,
+    environment: dict[str, str] | None = None,
 ) -> TemporalConnection:
     """Load connection settings, retaining useful local-development defaults."""
     source = os.environ if environment is None else environment
