@@ -2,7 +2,6 @@
 
 FROM worker-base
 
-# The project metadata names README.md, so it is required when uv installs the project.
 COPY --chown=app:app README.md ./
 COPY --chown=app:app src ./src
 RUN --mount=type=cache,target=/root/.cache/uv \
