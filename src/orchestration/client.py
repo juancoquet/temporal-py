@@ -25,10 +25,8 @@ def load_temporal_connection(
     namespace: NonEmptyStr | None = None,
 ) -> TemporalConnection:
     """Load connection settings, retaining useful local-development defaults."""
-    resolved_target = os.environ.get(_TARGET_ENV, _DEFAULT_TARGET) if target is None else target
-    resolved_namespace = (
-        os.environ.get(_NAMESPACE_ENV, _DEFAULT_NAMESPACE) if namespace is None else namespace
-    )
+    resolved_target = target or os.environ.get(_TARGET_ENV, _DEFAULT_TARGET)
+    resolved_namespace = namespace or os.environ.get(_NAMESPACE_ENV, _DEFAULT_NAMESPACE)
     return TemporalConnection(target=resolved_target, namespace=resolved_namespace)
 
 
