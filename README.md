@@ -67,6 +67,7 @@ uv run pytest
 
 The shared base image contains Python, uv, and common dependencies. Each worker image adds only its
 own dependency group. Bake builds the base internally and produces the deployable worker images.
+Pushes to `main` publish SHA-tagged images under `ghcr.io/juancoquet/temporal-py/`.
 
 Build all images without starting them:
 
@@ -106,5 +107,5 @@ Workflows use the same structure under `src/orchestration/workflows/`.
 
 ## Scope
 
-CI, registry publishing, Kubernetes manifests, infrastructure, worker authentication, observability,
-and application-specific retry policies are not included.
+Kubernetes manifests, infrastructure, worker authentication, observability, and application-specific
+retry policies are not included.
