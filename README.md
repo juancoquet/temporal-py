@@ -147,7 +147,7 @@ final build step runs `uv pip check` against the installed image environment.
 Build and load every deployable image into the local Docker engine:
 
 ```bash
-make images
+docker buildx bake --load
 ```
 
 Build one image by naming its Bake target, for example:

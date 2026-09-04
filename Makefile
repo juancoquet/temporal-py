@@ -1,4 +1,4 @@
-.PHONY: check images compose-up compose-down
+.PHONY: check compose-up compose-down
 
 check:
 	@printf '%s\n' '==> basedpyright'; \
@@ -7,10 +7,8 @@ check:
 	uv run --only-group dev ruff check && \
 	uv run --only-group dev ruff format --check --diff
 
-images:
+compose-up:
 	docker buildx bake --load
-
-compose-up: images
 	docker compose up
 
 compose-down:
