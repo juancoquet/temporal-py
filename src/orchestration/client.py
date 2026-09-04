@@ -32,7 +32,7 @@ def load_temporal_connection(
 
 async def build_client(connection: TemporalConnection | None = None) -> Client:
     """Connect a Temporal client with the orchestration layer's payload policy."""
-    resolved = load_temporal_connection() if connection is None else connection
+    resolved = connection or load_temporal_connection()
     return await Client.connect(
         resolved.target,
         namespace=resolved.namespace,
