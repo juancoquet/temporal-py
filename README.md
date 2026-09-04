@@ -161,10 +161,10 @@ using different local image names.
 
 ## Containerized local development
 
-After loading the images, start a Temporal development server and every worker container:
+Build the images, then start a Temporal development server and every worker container:
 
 ```bash
-docker compose up
+make compose-up
 ```
 
 Compose only runs the images produced by Bake; it does not define or trigger their builds. Workers
@@ -175,10 +175,10 @@ workers but does not start a workflow, so expensive or side-effecting runs remai
 Stop the stack while keeping its local Temporal data:
 
 ```bash
-docker compose down
+make compose-down
 ```
 
-Add `--volumes` when that development history should also be discarded.
+Run `docker compose down --volumes` when that development history should also be discarded.
 
 ## Adding an activity
 
