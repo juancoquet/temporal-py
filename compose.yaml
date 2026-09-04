@@ -1,4 +1,4 @@
-name: temporal-py
+name: temporal-py-local-dev
 
 services:
   temporal:
