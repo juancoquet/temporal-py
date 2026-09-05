@@ -69,6 +69,7 @@ The shared base image contains Python, uv, and common dependencies. Each worker 
 own dependency group. Bake builds the base internally and produces the deployable worker images.
 Pushes to `main` publish SHA-tagged images under `ghcr.io/juancoquet/temporal-py/`.
 GHCR is the example target; configure the deployment platform's registry in the workflow.
+Published images include the standard OCI source label linking them to their repository.
 
 Build all images without starting them:
 
