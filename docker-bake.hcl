@@ -6,6 +6,10 @@ variable "IMAGE_TAG" {
   default = "local"
 }
 
+variable "SOURCE_REPOSITORY" {
+  default = "https://github.com/juancoquet/temporal-py"
+}
+
 group "default" {
   targets = ["example-job", "example-plan", "example-process"]
 }
@@ -19,6 +23,9 @@ target "_worker" {
   context = "."
   contexts = {
     worker-base = "target:worker-base"
+  }
+  labels = {
+    "org.opencontainers.image.source" = SOURCE_REPOSITORY
   }
 }
 
