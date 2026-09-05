@@ -37,4 +37,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and publish worker images
-        run: docker buildx bake --push
+        uses: docker/bake-action@v7
+        with:
+          source: .
+          push: true
+          set: |
+            worker-base.cache-from=type=gha,scope=worker-base
+            worker-base.cache-to=type=gha,scope=worker-base,mode=max
+            example-job.cache-from=type=gha,scope=example-job
+            example-job.cache-to=type=gha,scope=example-job,mode=max
+            example-plan.cache-from=type=gha,scope=example-plan
+            example-plan.cache-to=type=gha,scope=example-plan,mode=max
+            example-process.cache-from=type=gha,scope=example-process
+            example-process.cache-to=type=gha,scope=example-process,mode=max
